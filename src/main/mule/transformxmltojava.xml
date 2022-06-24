@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="bec8491c-9e5b-45c6-8602-e1d557fee1ca" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="transformxmltojavaFlow" doc:id="de51ef29-a660-4052-99a8-62b4f570865b" >
+		<http:listener doc:name="Listener" doc:id="06d84f51-1876-4e3c-980f-9e251dea3efb" config-ref="HTTP_Listener_config" path="/transform"/>
+		<ee:transform doc:name="Transform Message" doc:id="25fb0cb3-a1e1-47ea-a9e0-ce2f8bd854b2" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0output application/java
+type myoffer= Object {class:"com.way2learnonline.Offer"}type myproduct= Object {class:"com.way2learnonline.Product"}
+---
+
+payload.products.*product map{	brandName:$.brandName,	name:$.name,	productId:$.productId as Number,	offer:{	offerPrice:$.offer.offerPrice as Number,	offerValidUntil:$.offer.offerValidUntil as Date {format:"YYYY-MM-DD"}} as myoffer,    images:$.images.*image,    originalPrice:$.originalPrice as Number,    description:$.description         } as myproduct]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="098580d0-625d-424f-bccd-d414f0632303" message="payload"/>
+	</flow>
+</mule>

@@ -1,0 +1,8 @@
+{
+  "sampleData": {
+    "25fb0cb3-a1e1-47ea-a9e0-ce2f8bd854b2": {
+      "payload": "sample_data/products.xml",
+      "attributes": "sample_data/httprequestattributes.dwl"
+    }
+  }
+}
